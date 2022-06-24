@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "pgdb": "sudo docker run --name postgres -d -p 5432:5432 -e POSTGRES_USER=ui_test -e POSTGRES_PASSWORD=ui_test -e POSTGRES_DB=ui_test postgres:14.4"
+    "pgdb": "sudo docker run --name postgres -d -p 5432:5432 -e POSTGRES_USER=ui_test -e POSTGRES_PASSWORD=ui_test -e POSTGRES_DB=ui_test postgres:14.4",
+    "init-table": "sudo docker exec -it postgres psql -U ui_test -c 'CREATE TABLE users ( acct varchar(128), pwd varchar(128), fullname varchar(128), created_at timestamp, updated_at timestamp, PRIMARY KEY (acct));'"
   },
   "author": "Henry Chang <humiya.chang@hotmail.com>",
   "license": "ISC",
