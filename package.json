@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "pgdb": "sudo docker run --name postgres -d -p 5432:5432 -e POSTGRES_USER=ui_test -e POSTGRES_PASSWORD=ui_test -e POSTGRES_DB=ui_test postgres:14.4"
   },
   "author": "Henry Chang <humiya.chang@hotmail.com>",
   "license": "ISC",
