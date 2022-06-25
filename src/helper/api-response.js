@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-const sendErr = (res, errorCode = StatusCodes.INTERNAL_SERVER_ERROR, errMsg = '') => {
+const sendErr = (res, errMsg = '', errorCode = StatusCodes.INTERNAL_SERVER_ERROR) => {
   res.status(errorCode).json({ errMsg });
 };
 const send = (res, data) => {

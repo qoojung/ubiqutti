@@ -17,7 +17,15 @@ const getUserListByFullname = async (fullname) => {
   return users;
 };
 
+const getUser = async (acct) => {
+  const user = await User.findByPk(acct, {
+    attributes: ['acct', 'fullname', 'created_at', 'updated_at'],
+  });
+  return user;
+};
+
 module.exports = {
   getAllUserList,
   getUserListByFullname,
+  getUser,
 };
