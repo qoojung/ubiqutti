@@ -1,4 +1,5 @@
 const { StatusCodes, getReasonPhrase } = require('http-status-codes');
+const { ApiError } = require('../helper/error');
 const asyncController = require('../helper/async-controller');
 const apiResp = require('../helper/api-response');
 
@@ -20,7 +21,20 @@ const getUser = async (req, res) => {
   return apiResp.send(res, user);
 };
 
+const addUser = async (req, res) => {
+  try {
+    await userService.addUser(req.body);
+    return apiResp.send(res, {});
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return apiResp.sendByApiError(res, e);
+    }
+    throw e;
+  }
+};
+
 module.exports = {
   getUserList: asyncController(getUserList),
   getUser: asyncController(getUser),
+  addUser: asyncController(addUser),
 };
