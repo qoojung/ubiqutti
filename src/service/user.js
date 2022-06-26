@@ -52,10 +52,28 @@ const delUser = async (acct) => {
   });
 };
 
+const modifyUser = async (acct, updateInfo) => {
+  const existCount = await User.count({ where: { acct } });
+  if (existCount === 0) {
+    throw new apiError.ApiError(apiError.apiErrorCodes.USER_NOT_EXIST);
+  }
+  const updateQuery = {};
+  if (updateInfo.fullname) {
+    updateQuery.fullname = updateInfo.fullname;
+  }
+  return User.update(
+    updateQuery,
+    {
+      where: { acct },
+    },
+  );
+};
+
 module.exports = {
   getAllUserList,
   getUserListByFullname,
   getUser,
   addUser,
   delUser,
+  modifyUser,
 };

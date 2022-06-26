@@ -8,5 +8,5 @@ router.get('/', auth, user.getUserList);
 router.get('/:acct', auth, user.getUser);
 router.post('/', user.addUser);
 router.delete('/:acct', auth, user.delUser);
-
+router.put('/:acct', auth, user.modifyUser);
 module.exports = router;

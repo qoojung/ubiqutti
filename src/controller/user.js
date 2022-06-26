@@ -45,9 +45,22 @@ const delUser = async (req, res) => {
   }
 };
 
+const modifyUser = async (req, res) => {
+  try {
+    await userService.modifyUser(req.params.acct, req.body);
+    return apiResp.send(res, {});
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return apiResp.sendByApiError(res, e);
+    }
+    throw e;
+  }
+};
+
 module.exports = {
   getUserList: asyncController(getUserList),
   getUser: asyncController(getUser),
   addUser: asyncController(addUser),
   delUser: asyncController(delUser),
+  modifyUser: asyncController(modifyUser),
 };
