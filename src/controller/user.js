@@ -33,8 +33,21 @@ const addUser = async (req, res) => {
   }
 };
 
+const delUser = async (req, res) => {
+  try {
+    await userService.delUser(req.params.acct);
+    return apiResp.send(res, {});
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return apiResp.sendByApiError(res, e);
+    }
+    throw e;
+  }
+};
+
 module.exports = {
   getUserList: asyncController(getUserList),
   getUser: asyncController(getUser),
   addUser: asyncController(addUser),
+  delUser: asyncController(delUser),
 };

@@ -40,9 +40,22 @@ const addUser = async (userInfo) => {
   return User.create(dbUser);
 };
 
+const delUser = async (acct) => {
+  const existCount = await User.count({ where: { acct } });
+  if (existCount === 0) {
+    throw new apiError.ApiError(apiError.apiErrorCodes.USER_NOT_EXIST);
+  }
+  return User.destroy({
+    where: {
+      acct,
+    },
+  });
+};
+
 module.exports = {
   getAllUserList,
   getUserListByFullname,
   getUser,
   addUser,
+  delUser,
 };
