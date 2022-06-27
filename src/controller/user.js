@@ -73,6 +73,18 @@ const modifyUser = async (req, res) => {
     throw e;
   }
 };
+const modifyUserFullname = async (req, res) => {
+  try {
+    const updateInfo = { fullname: req.body.fullname };
+    await userService.modifyUser(req.params.acct, updateInfo);
+    return apiResp.send(res, {});
+  } catch (e) {
+    if (e instanceof ApiError) {
+      return apiResp.sendByApiError(res, e);
+    }
+    throw e;
+  }
+};
 
 module.exports = {
   getUserList: asyncController(getUserList),
@@ -80,4 +92,5 @@ module.exports = {
   addUser: asyncController(addUser),
   delUser: asyncController(delUser),
   modifyUser: asyncController(modifyUser),
+  modifyUserFullname: asyncController(modifyUserFullname),
 };

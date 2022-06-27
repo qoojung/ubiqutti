@@ -9,4 +9,5 @@ router.get('/:acct', auth, user.getUser);
 router.post('/', user.addUser);
 router.delete('/:acct', auth, user.delUser);
 router.put('/:acct', auth, user.modifyUser);
+router.put('/:acct/fullname', auth, user.modifyUserFullname);
 module.exports = router;
