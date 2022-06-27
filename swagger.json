@@ -1,0 +1,292 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "User Management",
+    "contact": {}
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "basePath": "/api/v1",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/user": {
+      "get": {
+        "summary": "Get user list",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "after",
+            "type": "string",
+            "description": "a user acc where start to list user. the user acc is not included"
+          },
+          {
+            "in": "query",
+            "name": "fullname",
+            "type": "string",
+            "description": "user full name"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "description": "sort directions"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "description": "the number of records listed. if not specified, list all without pagination "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user list"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add User",
+        "security": [],
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "acct": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "fullname": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "acct",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully created"
+          }
+        }
+      }
+    },
+    "/user/{acct}": {
+      "get": {
+        "summary": "get user detail",
+        "operationId": "User",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "acct",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update User",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "acct",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "object",
+              "required": [
+                "fullname"
+              ],
+              "properties": {
+                "fullname": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfully changed"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete User",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "acct",
+            "type": "string",
+            "required": true,
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully changed"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/user/{acct}/fullname": {
+      "put": {
+        "summary": "Update User fullname",
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "acct",
+            "type": "string",
+            "required": true,
+            "description": ""
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fullname": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully changed"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "operationId": "Login",
+        "tags": [
+          "Auth"
+        ],
+        "security": [],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "acct": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "acct",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "User credential is not valid"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Auth Operations"
+    },
+    {
+      "name": "User",
+      "description": "User Operations"
+    }
+  ]
+}
