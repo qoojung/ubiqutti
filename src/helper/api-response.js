@@ -8,8 +8,12 @@ const sendByApiError = (res, apiError) => {
   sendErr(res, apiError.message, apiError.httpCode);
 };
 
-const send = (res, data) => {
-  res.status(StatusCodes.OK).json({ data });
+const send = (res, data, metadata) => {
+  const resData = { data };
+  if (metadata) {
+    resData.metadata = metadata;
+  }
+  res.status(StatusCodes.OK).json(resData);
 };
 module.exports = {
   sendErr,

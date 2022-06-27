@@ -1,20 +1,56 @@
 const bcrypt = require('bcrypt');
+const { Op } = require('sequelize');
 const apiError = require('../helper/error');
 const { User } = require('../model/db');
 
-const getAllUserList = async () => {
+const getAllUserList = async (sortDirection = null, limit = null, after = null) => {
+  const query = { attributes: ['acct'] };
+  if (sortDirection) {
+    query.order = [['acct', sortDirection]];
+  }
+  if (limit) {
+    query.limit = limit;
+  }
+  if (after) {
+    const op = sortDirection === 'asc' ? Op.gt : Op.lt;
+    query.where = {
+      acct: {
+        [op]: after,
+      },
+    };
+  }
   const users = await User.findAll(
-    { attributes: ['acct'] },
+    query,
   );
   return users;
 };
 
-const getUserListByFullname = async (fullname) => {
+const getUserListByFullname = async (
+  fullname,
+  sortDirection = null,
+  limit = null,
+  after = null,
+) => {
+  const query = {
+    attributes: ['acct'],
+    where: { fullname },
+  };
+  if (sortDirection) {
+    query.order = [['acct', sortDirection]];
+  }
+  if (limit) {
+    query.limit = limit;
+  }
+  if (after) {
+    const op = sortDirection === 'asc' ? Op.gt : Op.lt;
+    query.where = {
+      acct: {
+        [op]: after,
+      },
+    };
+  }
   const users = await User.findAll(
-    {
-      attributes: ['acct'],
-      where: { fullname },
-    },
+    query,
   );
   return users;
 };

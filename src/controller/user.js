@@ -5,14 +5,31 @@ const apiResp = require('../helper/api-response');
 
 const userService = require('../service/user');
 
-const getUserList = async (req, res) => {
+const getAllUserList = async (req, res) => {
   if (req.query.fullname) {
-    const users = await userService.getUserListByFullname(req.query.fullname);
+    const users = await userService.getUserListByFullname(req.query.fullname, req.query.sort);
     return apiResp.send(res, users);
   }
-  const users = await userService.getAllUserList();
+  const users = await userService.getAllUserList(req.query.sort);
   return apiResp.send(res, users);
 };
+const getPagedUserList = async (req, res) => {
+  let users;
+  if (req.query.fullname) {
+    users = await userService.getUserListByFullname(req.query.fullname, req.query.sort || 'asc', req.query.limit || 30, req.query.after);
+  } else {
+    users = await userService.getAllUserList(req.query.sort || 'asc', req.query.limit || 30, req.query.after);
+  }
+  const after = users.length === 0 ? null : users[users.length - 1].acct;
+  return apiResp.send(res, users, { after });
+};
+const getUserList = async (req, res) => {
+  if (req.query.limit) {
+    return getPagedUserList(req, res);
+  }
+  return getAllUserList(req, res);
+};
+
 const getUser = async (req, res) => {
   const user = await userService.getUser(req.params.acct);
   if (!user) {
