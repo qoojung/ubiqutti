@@ -6,6 +6,7 @@ const { promisify } = require('util');
 
 const apiError = require('../helper/error');
 const { User } = require('../model/db');
+const { eventEmitter, actions } = require('../event/user-event');
 
 class JwtVerify {
   constructor(privatekeyPath, publicKeyPath) {
@@ -47,11 +48,13 @@ const jwtverifier = new JwtVerify(
 const login = async (userinfo) => {
   const dbUser = await User.findByPk(userinfo.acct);
   if (!dbUser) {
+    eventEmitter.emit(actions.LOGIN_ATTEMPT_ERROR, userinfo.acct);
     throw new apiError.ApiError(apiError.apiErrorCodes.AUTHENTICATE_ERROR);
   }
 
   const isMatch = await bcrypt.compare(userinfo.password, dbUser.pwd);
   if (!isMatch) {
+    eventEmitter.emit(actions.LOGIN_ATTEMPT_ERROR, userinfo.acct);
     throw new apiError.ApiError(apiError.apiErrorCodes.AUTHENTICATE_ERROR);
   }
   return jwtverifier.sign({ acct: dbUser.user });
