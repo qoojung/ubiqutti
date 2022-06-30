@@ -2,6 +2,8 @@ const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 const { ApiError } = require('../helper/error');
 const asyncController = require('../helper/async-controller');
 const apiResp = require('../helper/api-response');
+const { key } = require('../schema/schema');
+const validator = require('../helper/validator');
 
 const userService = require('../service/user');
 
@@ -40,6 +42,10 @@ const getUser = async (req, res) => {
 
 const addUser = async (req, res) => {
   try {
+    const validate = validator.getSchema(key.addUser);
+    if (!validate(req.body)) {
+      return apiResp.sendErr(res, validator.errorsText(validate.errors), StatusCodes.BAD_REQUEST);
+    }
     await userService.addUser(req.body);
     return apiResp.send(res, {});
   } catch (e) {
@@ -64,6 +70,10 @@ const delUser = async (req, res) => {
 
 const modifyUser = async (req, res) => {
   try {
+    const validate = validator.getSchema(key.modifyUser);
+    if (!validate(req.body)) {
+      return apiResp.sendErr(res, validator.errorsText(validate.errors), StatusCodes.BAD_REQUEST);
+    }
     await userService.modifyUser(req.params.acct, req.body);
     return apiResp.send(res, {});
   } catch (e) {
@@ -75,6 +85,10 @@ const modifyUser = async (req, res) => {
 };
 const modifyUserFullname = async (req, res) => {
   try {
+    const validate = validator.getSchema(key.modifyUserFullname);
+    if (!validate(req.body)) {
+      return apiResp.sendErr(res, validator.errorsText(validate.errors), StatusCodes.BAD_REQUEST);
+    }
     const updateInfo = { fullname: req.body.fullname };
     await userService.modifyUser(req.params.acct, updateInfo);
     return apiResp.send(res, {});
